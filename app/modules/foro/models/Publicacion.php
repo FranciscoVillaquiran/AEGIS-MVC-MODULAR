@@ -36,4 +36,17 @@ class Publicacion extends Model
              ORDER BY p.fecha_publicacion DESC'
         );
     }
+
+    public function update(int $id, array $data): bool
+    {
+        $sql = 'UPDATE publicaciones_foro
+                SET titulo = ?, contenido = ?
+                WHERE id = ?';
+
+        return (bool) $this->query($sql, [
+            $data['titulo'],
+            $data['contenido'],
+            $id,
+        ]);
+    }
 }

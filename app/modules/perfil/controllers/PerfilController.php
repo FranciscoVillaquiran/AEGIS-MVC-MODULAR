@@ -65,11 +65,35 @@ class PerfilController extends Controller
             return;
         }
 
-        $this->perfilModel->update(Auth::id(), [
-            'descripcion' => trim($_POST['descripcion'] ?? ''),
-            'ciudad'      => trim($_POST['ciudad'] ?? ''),
-            'telefono'    => trim($_POST['telefono'] ?? ''),
-        ]);
+        $data = [];
+        if (isset($_POST['descripcion'])) {
+            $data['descripcion'] = trim($_POST['descripcion']);
+        }
+        if (isset($_POST['ciudad'])) {
+            $data['ciudad'] = trim($_POST['ciudad']);
+        }
+        if (isset($_POST['telefono'])) {
+            $data['telefono'] = trim($_POST['telefono']);
+        }
+
+        if (!empty($_FILES['foto_perfil']) && $_FILES['foto_perfil']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = ROOT_PATH . '/public/Assets/uploads/users/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $extension = pathinfo($_FILES['foto_perfil']['name'], PATHINFO_EXTENSION);
+            $filename = 'user_' . Auth::id() . '_' . time() . '.' . $extension;
+            $destination = $uploadDir . $filename;
+
+            if (move_uploaded_file($_FILES['foto_perfil']['tmp_name'], $destination)) {
+                $data['foto_perfil'] = $filename;
+            }
+        }
+
+        if (!empty($data)) {
+            $this->perfilModel->update(Auth::id(), $data);
+        }
 
         $updated = $this->perfilModel->findByUsuarioId(Auth::id());
         Auth::login($updated);

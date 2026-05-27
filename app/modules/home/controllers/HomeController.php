@@ -4,8 +4,6 @@ class HomeController extends Controller
 {
     public function index(): void
     {
-        $this->requireAuth();
-
         $productoModel = $this->loadModel('productos', 'Producto');
         $productos = $productoModel->getRecientes(8);
 

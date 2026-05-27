@@ -1,36 +1,240 @@
 <?php require_once ROOT_PATH . '/app/layouts/head.php'; ?>
+<link rel="stylesheet" href="/AEGIS/public/css/pages/home.css">
 <?php require_once ROOT_PATH . '/app/layouts/navbar.php'; ?>
 
-<main style="max-width:1200px;margin:30px auto;padding:0 20px;">
-    <section style="background:linear-gradient(135deg,#1E3A8A,#2563EB);color:#fff;padding:28px;border-radius:16px;margin-bottom:24px;">
-        <h1 style="margin:0 0 6px;">Bienvenido a AEGIS</h1>
-        <p style="margin:0;opacity:.9;">Compra y vende tecnología de forma segura con encuentros verificados.</p>
-    </section>
+<!-- ========================================
+     SUBNAV CATEGORÍAS
+========================================= -->
+
+<section class="subnav">
+    <a href="#"><i class="fa-solid fa-list"></i> Categorías <i class="fa-solid fa-chevron-down"></i></a>
+    <a href="#">Ofertas</a>
+    <a href="#">Electrónica</a>
+    <a href="#">Gaming</a>
+    <a href="#">Ropa</a>
+    <a href="#">Accesorios</a>
+    <a href="#">Hogar</a>
+    <a href="#">Coleccionables</a>
+    <a href="#">Vehículos</a>
+</section>
+
+<!-- ========================================
+     CONTENIDO PRINCIPAL
+========================================= -->
+
+<main class="home-container">
 
     <?php if (!empty($_SESSION['success'])): ?>
-        <div style="background:#DCFCE7;color:#166534;padding:10px 12px;border-radius:8px;margin-bottom:16px;">
+        <div style="background:#DCFCE7;color:#166534;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-weight:500;">
             <?= htmlspecialchars($_SESSION['success']) ?>
         </div>
         <?php unset($_SESSION['success']); ?>
     <?php endif; ?>
 
-    <section>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <h2 style="margin:0;">Productos recientes</h2>
-            <a href="<?= url('/productos') ?>" style="color:#2563EB;font-weight:600;">Ver todos</a>
+    <!--HERO-->
+
+    <section class="hero-section">
+
+        <!-- HERO IZQUIERDA -->
+
+        <div class="hero-main">
+
+            <div class="hero-badge">
+                Oferta destacada
+            </div>
+
+            <h1>
+                Potencia tu juego
+                <span>al máximo</span>
+            </h1>
+
+            <h2>
+                NVIDIA GeForce RTX™ 4070 Ti SUPER
+            </h2>
+
+            <p>
+                Gráficos increíbles, rendimiento superior
+                y la experiencia gaming definitiva.
+            </p>
+
+            <div class="hero-price">
+
+                <h3>$4.299.000</h3>
+
+                <span>$5.100.000</span>
+
+            </div>
+
+            <div class="hero-buttons">
+
+                <button class="primary-btn" onclick="window.location.href='<?= url('/productos') ?>'">
+                    Comprar ahora
+                </button>
+
+                <button class="secondary-btn" onclick="alert('Ver detalles del producto destacado')">
+                    Ver detalles
+                </button>
+
+            </div>
+
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;">
-            <?php foreach (($productos ?? []) as $producto): ?>
-                <article style="background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.06);padding:14px;">
-                    <h3 style="margin:0 0 6px;font-size:16px;"><?= htmlspecialchars($producto['titulo']) ?></h3>
-                    <p style="margin:0 0 10px;color:#6B7280;font-size:14px;"><?= htmlspecialchars($producto['categoria_nombre'] ?? 'Sin categoría') ?></p>
-                    <strong style="display:block;margin-bottom:10px;color:#111827;">$<?= number_format((float) $producto['precio'], 0, ',', '.') ?></strong>
-                    <a href="<?= url('/productos/detalle?id=' . (int) $producto['id']) ?>" style="display:inline-block;background:#2563EB;color:#fff;padding:8px 12px;border-radius:8px;">Ver detalle</a>
-                </article>
-            <?php endforeach; ?>
+
+        <!-- HERO DERECHA -->
+
+        <div class="hero-side">
+
+            <div class="promo-card orange">
+
+                <span>Oferta Hot</span>
+
+                <h3>Portátil HP Victus Gaming</h3>
+
+                <p>Hasta 50% OFF</p>
+
+                <button onclick="window.location.href='<?= url('/productos') ?>'">Ver oferta</button>
+
+            </div>
+
+            <div class="promo-card blue">
+
+                <span>Black Friday</span>
+
+                <h3>Descuentos increíbles</h3>
+
+                <p>Hasta 70% DTO</p>
+
+                <button onclick="window.location.href='<?= url('/productos') ?>'">Ver ofertas</button>
+
+            </div>
+
         </div>
+
     </section>
+
+
+
+    <!-- ========================================
+         FEATURES
+    ========================================= -->
+
+    <section class="features">
+
+        <div class="feature-card">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h4>Transacciones Seguras</h4>
+                <p>Compra con confianza</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <i class="fa-solid fa-user-check"></i>
+            <div>
+                <h4>Usuarios Verificados</h4>
+                <p>Perfiles con reputación</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <i class="fa-solid fa-location-dot"></i>
+            <div>
+                <h4>Puntos Físicos</h4>
+                <p>Encuentros seguros</p>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <i class="fa-solid fa-comments"></i>
+            <div>
+                <h4>Comunidad Activa</h4>
+                <p>Foros y ayuda</p>
+            </div>
+        </div>
+
+    </section>
+
+
+
+    <!-- ========================================
+         PRODUCTOS DESTACADOS
+    ========================================= -->
+
+    <section class="products-section">
+
+        <div class="section-header">
+
+            <h2>Productos Destacados</h2>
+
+            <a href="<?= url('/productos') ?>">Ver todos</a>
+
+        </div>
+
+
+        <div class="products-grid">
+
+            <?php foreach (($productos ?? []) as $producto): ?>
+
+                <!-- CARD -->
+
+                <a href="<?= url('/productos/detalle?id=' . (int) $producto['id']) ?>" class="product-card-link">
+                    <div class="product-card">
+
+                        <?php
+                        $estado = $producto['estado_producto'] ?? 'usado';
+                        $tagClass = '';
+                        $tagText = '';
+
+                        if ($estado === 'nuevo') {
+                            $tagClass = '';
+                            $tagText = 'Nuevo';
+                        } elseif ($estado === 'reacondicionado') {
+                            $tagClass = 'green';
+                            $tagText = 'Recondicionado';
+                        } else {
+                            $tagClass = 'blue';
+                            $tagText = 'Usado';
+                        }
+                        ?>
+
+                        <div class="product-tag <?= $tagClass ?>">
+                            <?= $tagText ?>
+                        </div>
+
+                        <img src="<?= !empty($producto['imagen_principal']) ? url('/Assets/uploads/products/' . htmlspecialchars($producto['imagen_principal'])) : 'https://via.placeholder.com/300x230?text=Sin+Imagen' ?>" alt="<?= htmlspecialchars($producto['titulo']) ?>" loading="lazy">
+
+                        <h3><?= htmlspecialchars($producto['titulo']) ?></h3>
+
+                        <!-- VENDOR INFO -->
+                        <div class="product-vendor">
+                            <div class="vendor-details">
+                                <p class="vendor-name"><?= htmlspecialchars($producto['vendedor_nombre'] ?? 'Vendedor desconocido') ?></p>
+                                <small class="vendor-rating">
+                                    <i class="fa-solid fa-star"></i>
+                                    <?= number_format((float) ($producto['vendedor_reputacion'] ?? 5), 1) ?>
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- LOCATION -->
+                        <div class="product-location">
+                            <span><?= htmlspecialchars($producto['ciudad'] ?? 'No especificada') ?></span>
+                        </div>
+
+                        <!-- PRICE -->
+                        <div class="product-price">
+                            <span class="price">$<?= number_format((float) $producto['precio'], 0, ',', '.') ?> COP</span>
+                        </div>
+
+                    </div>
+                </a>
+
+            <?php endforeach; ?>
+
+        </div>
+
+    </section>
+
 </main>
 
 <?php require_once ROOT_PATH . '/app/layouts/footer.php'; ?>

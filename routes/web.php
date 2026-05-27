@@ -45,6 +45,8 @@ $router->post('/productos/encuentro', 'ProductoController@solicitarEncuentro');
 $router->get('/foro', 'ForoController@index');
 $router->post('/foro/publicar', 'ForoController@crear');
 $router->post('/foro/comentar', 'ForoController@comentar');
+$router->get('/foro/editar', 'ForoController@editar');
+$router->post('/foro/actualizar', 'ForoController@actualizar');
 
 /*
 |--------------------------------------------------------------------------

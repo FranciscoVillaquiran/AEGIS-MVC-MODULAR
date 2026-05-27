@@ -14,9 +14,9 @@ $router = new Router();
 
 require_once '../routes/web.php';
 
-$url = $_GET['url'] ?? '/';
+$url = trim((string) ($_GET['url'] ?? ''), '/');
 
-if ($url === '/') {
+if ($url === '') {
     header('Location: ' . url('/login'));
     exit;
 }

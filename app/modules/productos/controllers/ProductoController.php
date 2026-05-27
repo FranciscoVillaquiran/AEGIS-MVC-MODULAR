@@ -17,17 +17,40 @@ class ProductoController extends Controller
 
     public function index(): void
     {
-        $cat = trim($_GET['cat'] ?? '');
+        // Obtener filtros de la solicitud
+        $filtros = [
+            'busqueda' => trim($_GET['busqueda'] ?? ''),
+            'precio_max' => isset($_GET['precio_max']) ? (float) $_GET['precio_max'] : 0,
+            'estado' => trim($_GET['estado'] ?? 'todo'),
+            'categoria' => trim($_GET['cat'] ?? ''),
+            'sort' => trim($_GET['sort'] ?? 'reciente'),
+            'limit' => 24,
+            'offset' => 0,
+        ];
 
-        if ($cat !== '') {
-            $productos = $this->productoModel->findByCategoria($cat);
+        // Verificar si hay algún filtro activo
+        $hayFiltros = !empty($filtros['busqueda']) || 
+                      $filtros['precio_max'] > 0 || 
+                      $filtros['estado'] !== 'todo' || 
+                      !empty($filtros['categoria']);
+
+        if ($hayFiltros) {
+            $productos = $this->productoModel->searchAndFilter($filtros);
+            $totalProductos = $this->productoModel->countSearchResults($filtros);
         } else {
-            $productos = $this->productoModel->getRecientes(24);
+            $productos = $this->productoModel->getRecientes($filtros['limit']);
+            $totalProductos = $this->productoModel->countActivos();
         }
+
+        // Obtener todas las categorías para el filtro
+        $categorias = $this->categoriaModel->getAll();
 
         $this->render(ROOT_PATH . '/app/modules/productos/views/index.php', [
             'productos' => $productos,
-            'categoria' => $cat,
+            'categoria' => $filtros['categoria'],
+            'filtros' => $filtros,
+            'totalProductos' => $totalProductos,
+            'categorias' => $categorias,
         ]);
     }
 
@@ -56,11 +79,26 @@ class ProductoController extends Controller
             $this->notFound();
         }
 
+        // Traer datos del usuario que creó el producto
+        $usuarioModel = $this->loadModel('auth', 'Usuario');
+        $usuario = $usuarioModel->findById((int) $producto['usuario_id']);
+
+        // Traer imagen principal del producto
+        $sql = 'SELECT imagen FROM imagenes_producto WHERE producto_id = ? AND principal = 1 LIMIT 1';
+        $imagenRow = $this->productoModel->fetch($sql, [$id]);
+        $imagenPrincipal = null;
+
+        if ($imagenRow) {
+            $imagenPrincipal = asset('Assets/uploads/products/' . htmlspecialchars($imagenRow['imagen']));
+        }
+
         $puntos = $this->puntoModel->getActivos();
 
         $this->render(ROOT_PATH . '/app/modules/productos/views/detalle.php', [
-            'producto' => $producto,
-            'puntos'   => $puntos,
+            'producto'           => $producto,
+            'usuario'            => $usuario ?? [],
+            'imagen_principal'   => $imagenPrincipal,
+            'puntos'             => $puntos,
         ]);
     }
 
@@ -85,6 +123,31 @@ class ProductoController extends Controller
         }
 
         $id = $this->productoModel->create($data);
+
+        // Manejar imagen principal si fue subida
+        if (!empty($_FILES['imagen_principal']) && $_FILES['imagen_principal']['error'] === UPLOAD_ERR_OK) {
+            $file = $_FILES['imagen_principal'];
+
+            // Validar tipo MIME usando getimagesize
+            $info = @getimagesize($file['tmp_name']);
+            if ($info !== false) {
+                $ext = image_type_to_extension($info[2], false);
+                $filename = 'prod_' . $id . '_' . time() . '.' . $ext;
+
+                $uploadDir = ROOT_PATH . '/public/Assets/uploads/products';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                $destination = $uploadDir . '/' . $filename;
+
+                if (move_uploaded_file($file['tmp_name'], $destination)) {
+                    // Guardar referencia en la tabla imagenes_producto
+                    $sql = 'INSERT INTO imagenes_producto (producto_id, imagen, principal) VALUES (?, ?, ?)';
+                    $this->productoModel->query($sql, [$id, $filename, 1]);
+                }
+            }
+        }
 
         $_SESSION['success'] = 'Producto publicado correctamente';
         $this->redirect('/productos/detalle?id=' . $id);

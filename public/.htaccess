@@ -1,8 +1,9 @@
 RewriteEngine On
+RewriteBase /AEGIS/public/
 
 # Si el archivo o carpeta no existe
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Redireccionar todo a index.php
-RewriteRule ^ index.php [QSA,L]
+# Enviar la ruta amigable a index.php (ej. /login -> ?url=login)
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

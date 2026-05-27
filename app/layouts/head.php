@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>AEGIS</title>
+    <title><?= htmlspecialchars($pageTitle ?? 'AEGIS') ?></title>
 
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
@@ -18,6 +18,10 @@
 
     <link rel="stylesheet"
           href="/AEGIS/public/Assets/global/global.css">
+
+    <?php if (!empty($pageStylesheet)): ?>
+    <link rel="stylesheet" href="<?= htmlspecialchars($pageStylesheet) ?>">
+    <?php endif; ?>
 
 </head>
 

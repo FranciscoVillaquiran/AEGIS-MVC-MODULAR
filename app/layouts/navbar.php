@@ -22,7 +22,15 @@
         <?php if (Auth::check()): ?>
             <div class="profile-dropdown">
                 <button class="profile-btn">
-                    <img src="https://i.pravatar.cc/100?u=<?= urlencode((string) (Auth::user()['email'] ?? 'aegis')) ?>" alt="Usuario">
+                    <?php
+                        $user = Auth::user();
+                        $fotoPerfil = trim((string) ($user['foto_perfil'] ?? ''));
+                        $fotoPath = ROOT_PATH . '/public/Assets/uploads/users/' . basename($fotoPerfil);
+                        $avatarSrc = (is_file($fotoPath) && $fotoPerfil !== '')
+                            ? url('/Assets/uploads/users/' . $fotoPerfil)
+                            : avatar_url($user['username'] ?? $user['email'] ?? 'aegis', 100);
+                    ?>
+                    <img src="<?= htmlspecialchars($avatarSrc) ?>" alt="Usuario">
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="dropdown-menu">

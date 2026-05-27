@@ -1,5 +1,11 @@
-/* Login page specific styles */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
 body{
+    font-family:'Inter', sans-serif;
     background:#ffffff;
     height:100vh;
     overflow:hidden;
@@ -10,6 +16,10 @@ body{
     width:100%;
     height:100vh;
 }
+
+/* =========================
+   PANEL IZQUIERDO
+========================= */
 
 .left-panel{
     width:50%;
@@ -33,9 +43,11 @@ body{
     border-radius:14px;
     border:1px solid rgba(29,209,161,0.35);
     background:rgba(29,209,161,0.08);
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     margin-bottom:26px;
 }
 
@@ -96,6 +108,10 @@ body{
     font-size:11px;
 }
 
+/* =========================
+   PANEL DERECHO
+========================= */
+
 .right-panel{
     width:50%;
     background:#F5F5F7;
@@ -114,7 +130,7 @@ body{
     font-size:14px;
     text-decoration:none;
     margin-bottom:48px;
-    transition:0.2s ease;
+    transition:0.2s;
 }
 
 .back-home:hover{
@@ -126,6 +142,39 @@ body{
     font-weight:800;
     color:#111111;
     margin-bottom:44px;
+}
+
+.input-group{
+    margin-bottom:28px;
+}
+
+.input-group label{
+    display:block;
+    font-size:14px;
+    color:#555555;
+    margin-bottom:12px;
+}
+
+.input-group input{
+    width:100%;
+    height:52px;
+    border:none;
+    outline:none;
+    border-radius:15px;
+    background:white;
+    padding:0 18px;
+    font-size:14px;
+    color:#333;
+    border:2px solid transparent;
+    transition:0.2s;
+}
+
+.input-group input:focus{
+    border:2px solid #294292;
+}
+
+.input-group input::placeholder{
+    color:#B9B9B9;
 }
 
 .password-wrapper{
@@ -158,14 +207,18 @@ body{
     color:white;
     font-size:14px;
     font-weight:700;
+
     display:flex;
     align-items:center;
     justify-content:center;
     gap:10px;
+
     cursor:pointer;
-    transition:0.2s ease;
+    transition:0.2s;
     margin-top:36px;
+
     box-shadow:0 3px 0 #16255A;
+
     text-decoration:none;
 }
 
@@ -186,4 +239,41 @@ form:invalid .login-btn{
 form:valid .login-btn{
     opacity:1;
     pointer-events:auto;
+}
+
+.auth-alert{
+    padding:10px 14px;
+    border-radius:12px;
+    margin-bottom:20px;
+    font-size:14px;
+    line-height:1.4;
+}
+
+.auth-alert--error{
+    background:#FEE2E2;
+    color:#991B1B;
+}
+
+.auth-alert--success{
+    background:#DCFCE7;
+    color:#166534;
+}
+
+.register-hint{
+    margin-top:24px;
+    text-align:center;
+    font-size:14px;
+    color:#6B7280;
+}
+
+.register-hint a{
+    color:#294292;
+    font-weight:600;
+    text-decoration:none;
+    margin-left:4px;
+}
+
+.register-hint a:hover{
+    color:#22397F;
+    text-decoration:underline;
 }

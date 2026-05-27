@@ -1,45 +1,141 @@
-<?php require_once ROOT_PATH . '/app/layouts/head.php'; ?>
-<?php require_once ROOT_PATH . '/app/layouts/navbar.php'; ?>
+<?php
+$pageTitle = 'AEGIS | Publicar Producto';
+$pageStylesheet = asset('Assets/css/pages/publish.css');
+require_once ROOT_PATH . '/app/layouts/head.php';
+require_once ROOT_PATH . '/app/layouts/navbar.php';
+?>
 
-<main style="max-width:860px;margin:30px auto;padding:0 20px;">
-    <h1 style="margin-bottom:16px;">Publicar producto</h1>
+<main class="main-content publish-page">
 
-    <?php if (!empty($_SESSION['error'])): ?>
-        <div style="background:#FEE2E2;color:#991B1B;padding:10px 12px;border-radius:8px;margin-bottom:12px;">
-            <?= htmlspecialchars($_SESSION['error']) ?>
+    <form id="publishForm" method="POST" action="<?= url('/productos/guardar') ?>" enctype="multipart/form-data">
+
+        <div class="publish-header">
+
+            <div class="publish-title">
+
+                <a href="<?= url('/productos') ?>" aria-label="Volver a productos">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+
+                <h1>Publicación</h1>
+
+            </div>
+
+            <button type="submit" class="publish-btn">
+                Publicar
+            </button>
+
         </div>
-        <?php unset($_SESSION['error']); ?>
-    <?php endif; ?>
 
-    <form method="POST" action="<?= url('/productos/guardar') ?>" style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-        <label>Título</label>
-        <input type="text" name="titulo" required style="width:100%;padding:10px;margin:6px 0 12px;border:1px solid #D1D5DB;border-radius:8px;">
+        <?php if (!empty($_SESSION['error'])): ?>
+            <div class="auth-alert auth-alert--error">
+                <?= htmlspecialchars($_SESSION['error']) ?>
+            </div>
+            <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
 
-        <label>Categoría</label>
-        <select name="categoria_id" required style="width:100%;padding:10px;margin:6px 0 12px;border:1px solid #D1D5DB;border-radius:8px;">
-            <?php foreach (($categorias ?? []) as $categoria): ?>
-                <option value="<?= (int) $categoria['id'] ?>"><?= htmlspecialchars($categoria['nombre']) ?></option>
-            <?php endforeach; ?>
-        </select>
+        <section class="publish-card">
 
-        <label>Precio</label>
-        <input type="number" name="precio" min="1" step="0.01" required style="width:100%;padding:10px;margin:6px 0 12px;border:1px solid #D1D5DB;border-radius:8px;">
+            <div class="images-section">
 
-        <label>Estado</label>
-        <select name="estado" style="width:100%;padding:10px;margin:6px 0 12px;border:1px solid #D1D5DB;border-radius:8px;">
-            <option value="nuevo">Nuevo</option>
-            <option value="usado">Usado</option>
-            <option value="reacondicionado">Reacondicionado</option>
-        </select>
+                <h2>1. Imágenes</h2>
 
-        <label>Ciudad</label>
-        <input type="text" name="ciudad" value="Medellín" style="width:100%;padding:10px;margin:6px 0 12px;border:1px solid #D1D5DB;border-radius:8px;">
+                <div class="images-container">
 
-        <label>Descripción</label>
-        <textarea name="descripcion" rows="5" style="width:100%;padding:10px;margin:6px 0 12px;border:1px solid #D1D5DB;border-radius:8px;"></textarea>
+                    <div class="main-image" role="presentation">
 
-        <button type="submit" style="background:#2563EB;color:#fff;border:none;padding:10px 14px;border-radius:8px;">Publicar</button>
+                        <label for="imagen_principal" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;">
+                            <i class="fa-regular fa-image"></i>
+                            <span>Añadir Foto Principal</span>
+                        </label>
+                        <input type="file" id="imagen_principal" name="imagen_principal" accept="image/*" style="display:none;">
+
+                    </div>
+
+                    <div class="small-images">
+
+                        <div class="small-box" role="presentation">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                        <div class="small-box" role="presentation">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                        <div class="small-box" role="presentation">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                        <div class="small-box" role="presentation">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="info-section">
+
+                <h2>2. Información Básica</h2>
+
+                <div class="input-group">
+                    <label for="titulo">Título del anuncio</label>
+                    <input type="text" id="titulo" name="titulo" required placeholder="Ej. Tarjeta gráfica RTX 4070">
+                </div>
+
+                <div class="input-group">
+                    <label for="categoria_id">Categoría</label>
+                    <select id="categoria_id" name="categoria_id" required>
+                        <?php foreach (($categorias ?? []) as $categoria): ?>
+                            <option value="<?= (int) $categoria['id'] ?>">
+                                <?= htmlspecialchars($categoria['nombre']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="estado">Estado</label>
+                    <select id="estado" name="estado">
+                        <option value="nuevo">Nuevo</option>
+                        <option value="usado">Usado</option>
+                        <option value="reacondicionado">Reacondicionado</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="details-card">
+
+            <h2>3. Detalles del Intercambio</h2>
+
+            <div class="double-grid">
+
+                <div class="input-group">
+                    <label for="precio">Precio Referencial</label>
+                    <input type="number" id="precio" name="precio" min="1" step="0.01" required placeholder="COP 0.00">
+                </div>
+
+                <div class="input-group">
+                    <label for="ciudad">Ciudad</label>
+                    <input type="text" id="ciudad" name="ciudad" value="Medellín" placeholder="Medellín">
+                </div>
+
+            </div>
+
+            <div class="input-group">
+                <label for="descripcion">Descripción (Opcional)</label>
+                <textarea id="descripcion" name="descripcion" placeholder="Especificaciones opcionales..."></textarea>
+            </div>
+
+        </section>
+
     </form>
+
 </main>
 
 <?php require_once ROOT_PATH . '/app/layouts/footer.php'; ?>

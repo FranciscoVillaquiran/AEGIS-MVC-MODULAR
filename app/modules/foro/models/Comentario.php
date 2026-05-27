@@ -5,10 +5,11 @@ class Comentario extends Model
     public function findByPublicacion($publicacionId)
     {
         return $this->fetchAll(
-            "SELECT c.*, u.nombre, u.foto_perfil FROM comentarios_foro c 
-             JOIN usuarios u ON c.usuario_id = u.id 
-             WHERE c.publicacion_id = ? 
-             ORDER BY c.fecha_comentario DESC",
+            'SELECT c.*, u.nombre, u.username, u.foto_perfil
+             FROM comentarios_foro c
+             JOIN usuarios u ON c.usuario_id = u.id
+             WHERE c.publicacion_id = ?
+             ORDER BY c.fecha_comentario ASC',
             [$publicacionId]
         );
     }
